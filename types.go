@@ -23,24 +23,22 @@ type Algorithm struct {
 // SignedInfo includes a canonicalization algorithm, a signature algorithm, and a reference.
 type SignedInfo struct {
 	XMLName                xml.Name  `xml:"http://www.w3.org/2000/09/xmldsig# SignedInfo"`
-	CanonicalizationMethod Algorithm `xml:"http://www.w3.org/2000/09/xmldsig# CanonicalizationMethod"`
-	SignatureMethod        Algorithm `xml:"http://www.w3.org/2000/09/xmldsig# SignatureMethod"`
+	CanonicalizationMethod Algorithm `xml:"CanonicalizationMethod"`
+	SignatureMethod        Algorithm `xml:"SignatureMethod"`
 	Reference              Reference
 }
 
 // Reference specifies a digest algorithm and digest value, and optionally an identifier of the object being signed, the type of the object, and/or a list of transforms to be applied prior to digesting.
 type Reference struct {
-	XMLName      xml.Name `xml:"http://www.w3.org/2000/09/xmldsig# Reference"`
-	URI          string   `xml:",attr,omitempty"`
+	URI          string `xml:",attr"`
 	Transforms   Transforms
-	DigestMethod Algorithm `xml:"http://www.w3.org/2000/09/xmldsig# DigestMethod"`
-	DigestValue  string    `xml:"http://www.w3.org/2000/09/xmldsig# DigestValue"`
+	DigestMethod Algorithm `xml:"DigestMethod"`
+	DigestValue  string    `xml:"DigestValue"`
 }
 
 // Transforms is an optional ordered list of processing steps that were applied to the resource's content before it was digested.
 type Transforms struct {
-	XMLName   xml.Name    `xml:"http://www.w3.org/2000/09/xmldsig# Transforms"`
-	Transform []Algorithm `xml:"http://www.w3.org/2000/09/xmldsig# Transform"`
+	Transform []Algorithm `xml:"Transform"`
 }
 
 // KeyInfo is an optional element that enables the recipient(s) to obtain the key needed to validate the signature.

@@ -4,6 +4,7 @@ package xmlsig
 import (
 	"crypto"
 	"crypto/rand"
+	"encoding/xml"
 	"errors"
 	// import supported crypto hash function
 	_ "crypto/sha1"
@@ -117,18 +118,15 @@ func (s *signer) CreateSignature(data interface{}) (*Signature, error) {
 	signature.SignedInfo.SignatureMethod.Algorithm = s.sigAlg.name
 	signature.SignedInfo.Reference.DigestMethod.Algorithm = s.digestAlg.name
 	// canonicalize the Item
-	canonData, id, err := canonicalize(data)
+	canonData, err := xml.Marshal(data)
 	if err != nil {
 		return nil, err
-	}
-	if id != "" {
-		signature.SignedInfo.Reference.URI = "#" + id
 	}
 	// calculate the digest
 	digest := s.digest(canonData)
 	signature.SignedInfo.Reference.DigestValue = digest
 	// canonicalize the SignedInfo
-	canonData, _, err = canonicalize(signature.SignedInfo)
+	canonData, err = xml.Marshal(signature.SignedInfo)
 	if err != nil {
 		return nil, err
 	}
